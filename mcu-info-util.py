@@ -4,13 +4,13 @@ import linker_script
 from svd import load_svd_for_mcu
 
 parser = argparse.ArgumentParser(description='MCU info util')
-parser.add_argument('--mcu', help='Specify MCU model (e. g. STM32F407VG)')
-parser.add_argument('--linker-script', help='Specify output file name for linker script')
-parser.add_argument('--header', help='Specify output file name for header')
-parser.add_argument('--use-defines', help='Use #define instead of static const', action='store_true')
-parser.add_argument('--enable-libopencm3', help='Enable linking with libopencm3 library (if supported for target MCU)',
+parser.add_argument('--mcu', help='specify MCU model (e. g. STM32F407VG)')
+parser.add_argument('--linker-script', help='specify output file name for linker script')
+parser.add_argument('--header', help='specify output file name for header')
+parser.add_argument('--use-defines', help='use #define instead of static const', action='store_true')
+parser.add_argument('--enable-libopencm3', help='enable linking with libopencm3 library (if supported for target MCU)',
 					action='store_true')
-parser.add_argument('--metadata-dir', help='Specify metadata directory')
+parser.add_argument('--metadata-dir', help='specify metadata directory')
 args = parser.parse_args()
 
 if args.metadata_dir:
