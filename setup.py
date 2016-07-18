@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
 	name='mcu-info-util',
-	version='0.0.1',
+	version='0.1',
 	author='Ivan Kolesnikov',
 	author_email='kiv.apple@gmail.com',
 	url='https://github.com/KivApple/mcu-info-util',
