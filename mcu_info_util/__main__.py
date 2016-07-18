@@ -13,14 +13,14 @@ def main():
 	parser.add_argument('--use-defines', help='use #define instead of static const', action='store_true')
 	parser.add_argument('--enable-libopencm3', help='enable linking with libopencm3 library (if supported for target MCU)',
 						action='store_true')
-	parser.add_argument('--metadata-dir', help='specify metadata directory')
+	parser.add_argument('--share-dir', help='specify share directory')
 	args = parser.parse_args()
 
 	if args.metadata_dir:
 		metadata_dir = args.metadata_dir
 	else:
 
-		metadata_dir = os.path.dirname(__file__) + '/../metadata'
+		metadata_dir = os.path.dirname(__file__) + '/../share/mcu-info-util'
 
 	if args.mcu:
 		device_tree = DeviceTree(metadata_dir + '/devices.data')

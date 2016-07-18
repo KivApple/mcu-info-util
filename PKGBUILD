@@ -13,5 +13,6 @@ md5sums=('SKIP')
 package() {
     cd mcu-info-util
     python setup.py bdist
-    tar -xvf dist/mcu-info-util-*.tar.gz
+    cd $pkgdir
+    tar -xzvf $srcdir/mcu-info-util/dist/mcu-info-util-*.tar.gz
 }

@@ -14,6 +14,6 @@ setup(
 		]
 	},
 	data_files=[
-		(d, [os.path.join(d, f) for f in files]) for d, folders, files in os.walk('metadata')
+		(d, [os.path.join(d, f) for f in files]) for d, folders, files in os.walk('share')
 	]
 )
