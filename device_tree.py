@@ -40,7 +40,7 @@ class DeviceTreeEntry:
 		if self.parent:
 			parent = self.tree.find(self.parent)
 			if parent:
-				options = options + parent.get_options()
+				options = options + parent.get_options(enable_libopencm3=enable_libopencm3, only_defines=only_defines)
 		final_options = []
 		for option in options:
 			if option[0] == '-':
