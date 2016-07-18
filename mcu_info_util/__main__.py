@@ -13,7 +13,7 @@ def main():
 	parser.add_argument('--use-defines', help='use #define instead of static const', action='store_true')
 	parser.add_argument('--enable-libopencm3', help='enable linking with libopencm3 library (if supported for target MCU)',
 						action='store_true')
-	parser.add_argument('--share-dir', help='specify share directory')
+	parser.add_argument('--metadata-dir', help='specify metadata directory')
 	args = parser.parse_args()
 
 	if args.metadata_dir:
