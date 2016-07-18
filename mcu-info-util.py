@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser(description='MCU info util')
 parser.add_argument('--mcu', help='Specify MCU model (e. g. STM32F407VG)')
 parser.add_argument('--linker-script', help='Specify output file name for linker script')
 parser.add_argument('--header', help='Specify output file name for header')
+parser.add_argument('--use-defines', help='Use #define instead of static const', action='store_true')
 parser.add_argument('--enable-libopencm3', help='Enable linking with libopencm3 library (if supported for target MCU)',
 					action='store_true')
 parser.add_argument('--metadata-dir', help='Specify metadata directory')
@@ -15,6 +16,7 @@ args = parser.parse_args()
 if args.metadata_dir:
 	metadata_dir = args.metadata_dir
 else:
+
 	metadata_dir = os.path.dirname(__file__) + '/metadata'
 
 if args.mcu:
@@ -28,6 +30,6 @@ if args.mcu:
 	if args.header:
 		svd = load_svd_for_mcu(metadata_dir + '/SVD', args.mcu)
 		if svd:
-			svd.generate_header(args.header)
+			svd.generate_header(args.header, use_defines=args.use_defines)
 else:
 	parser.print_help()

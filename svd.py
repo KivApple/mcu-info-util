@@ -22,7 +22,7 @@ class SVD:
 		for periph in periphList.iter('peripheral'):
 			self.periphList.append(Peripheral(self, periph))
 
-	def generate_header(self, file_name):
+	def generate_header(self, file_name, use_defines = False):
 		f = open(file_name, 'w')
 		include_guard = '__%s__' % (os.path.basename(file_name).replace('.', '_').upper())
 		f.write('#ifndef %s\n' % (include_guard))
@@ -109,7 +109,10 @@ class SVD:
 			for interrupt in periph.interrupts:
 				if interrupt.name in interrupts_names:
 					f.write('/* ')
-				f.write('static const uint8_t %s_IRQ = %s;' % (interrupt.name, interrupt.index))
+				if use_defines:
+					f.write('#define %s_IRQ %s' % (interrupt.name, interrupt.index))
+				else:
+					f.write('static const uint8_t %s_IRQ = %s;' % (interrupt.name, interrupt.index))
 				if interrupt.name in interrupts_names:
 					f.write(' */')
 				f.write('\n\n')
@@ -119,23 +122,40 @@ class SVD:
 				interrupts_names.append(interrupt.name)
 			for reg in periph.regs:
 				f.write('/* %s_%s: %s */\n' % (periph.name, reg.name, reg.desc))
-				f.write('static volatile uint%s_t* const %s_%s = ((volatile uint%s_t*)(%s_BASE + %s));\n' %
-						(reg.size, periph.name, reg.name, reg.size, periph.name, reg.offset))
+				if use_defines:
+					f.write('#define %s_%s ((volatile uint%s_t*)(%s_BASE + %s)) \n' %
+							(periph.name, reg.name, reg.size, periph.name, reg.offset))
+				else:
+					f.write('static volatile uint%s_t* const %s_%s = ((volatile uint%s_t*)(%s_BASE + %s));\n' %
+							(reg.size, periph.name, reg.name, reg.size, periph.name, reg.offset))
 				f.write('\n')
 				for field in reg.fields:
 					if field.size == reg.size:
 						continue
 					f.write('/* %s_%s_%s: %s */\n' % (periph.name, reg.name, field.name, field.desc))
 					if field.size == 1:
-						f.write('static const uint%s_t %s_%s_%s = bit(%s);\n' %
-								(reg.size, periph.name, reg.name, field.name, field.offset))
+						if use_defines:
+							f.write('#define %s_%s_%s bit(%s)\n' %
+									(periph.name, reg.name, field.name, field.offset))
+						else:
+							f.write('static const uint%s_t %s_%s_%s = bit(%s);\n' %
+									(reg.size, periph.name, reg.name, field.name, field.offset))
 					else:
-						f.write('static const uint8_t %s_%s_%s_OFFSET = %s;\n' %
-								(periph.name, reg.name, field.name, field.offset))
-						f.write('static const uint8_t %s_%s_%s_LENGTH = %s;\n' %
-								(periph.name, reg.name, field.name, field.size))
-						f.write('static const uint%s_t %s_%s_%s_MASK = %s;\n' %
-								(reg.size, periph.name, reg.name, field.name, hex(((2 ** field.size) - 1) << field.offset)))
+						if use_defines:
+							f.write('#define %s_%s_%s_OFFSET %s\n' %
+									(periph.name, reg.name, field.name, field.offset))
+							f.write('#define %s_%s_%s_LENGTH %s\n' %
+									(periph.name, reg.name, field.name, field.size))
+							f.write('#define %s_%s_%s_MASK %s\n' %
+									(periph.name, reg.name, field.name,
+									 hex(((2 ** field.size) - 1) << field.offset)))
+						else:
+							f.write('static const uint8_t %s_%s_%s_OFFSET = %s;\n' %
+									(periph.name, reg.name, field.name, field.offset))
+							f.write('static const uint8_t %s_%s_%s_LENGTH = %s;\n' %
+									(periph.name, reg.name, field.name, field.size))
+							f.write('static const uint%s_t %s_%s_%s_MASK = %s;\n' %
+									(reg.size, periph.name, reg.name, field.name, hex(((2 ** field.size) - 1) << field.offset)))
 				f.write('\n')
 			f.write('#endif\n')
 			f.write('\n')
