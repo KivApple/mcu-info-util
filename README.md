@@ -6,4 +6,6 @@ for specified MCU.
 
 Currently supported only some ARM MCUs.
 
-Run ./mcu-info-util.py -h for information about usage.
+Run python setup.py install to install application to your system.
+
+Run mcu-info-util -h after installation for information about usage.
