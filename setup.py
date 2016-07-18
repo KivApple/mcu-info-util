@@ -12,5 +12,8 @@ setup(
 		'console_scripts': [
 			'mcu-info-util = mcu_info_util.__main__:main'
 		]
-	}
+	},
+	data_files=[
+		(d, [os.path.join(d, f) for f in files]) for d, folders, files in os.walk('metadata')
+	]
 )
