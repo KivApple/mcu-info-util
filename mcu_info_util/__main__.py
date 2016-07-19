@@ -20,7 +20,7 @@ def main():
 		metadata_dir = args.metadata_dir
 	else:
 
-		metadata_dir = os.path.dirname(__file__) + '/../share/mcu-info-util'
+		metadata_dir = os.path.join(os.path.dirname(__file__), 'metadata')
 
 	if args.mcu:
 		device_tree = DeviceTree(metadata_dir + '/devices.data')
