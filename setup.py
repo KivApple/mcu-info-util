@@ -15,5 +15,8 @@ setup(
 		'console_scripts': [
 			'mcu-info-util = mcu_info_util.__main__:main'
 		]
-	}
+	},
+	install_requires=[
+		'six'
+	]
 )

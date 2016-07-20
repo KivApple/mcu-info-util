@@ -1,3 +1,5 @@
+from six import iteritems
+
 def generate(file_name, options):
 	defines = {}
 	for option in options:
@@ -14,7 +16,7 @@ def generate(file_name, options):
 	f.write('ENTRY(reset_handler)\n')
 	f.write('\n')
 	f.write('MEMORY {\n')
-	for k, v in defines.iteritems():
+	for k, v in iteritems(defines):
 		if k.endswith('_OFF'):
 			continue
 		offset_key = '%s_OFF' % (k)
@@ -79,7 +81,7 @@ def generate(file_name, options):
 	f.write('\t\t. = ALIGN(4);\n')
 	f.write('\t\t_ebss = .;\n')
 	f.write('\t} >ram\n')
-	for k, v in defines.iteritems():
+	for k, v in iteritems(defines):
 		if k.endswith('_OFF'):
 			continue
 		offset_key = '%s_OFF' % (k)
