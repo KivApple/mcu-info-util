@@ -75,7 +75,7 @@ def generate(file_name, options):
 	f.write('\t\t_edata = .;\n')
 	f.write('\t} >ram AT >rom\n')
 	f.write('\t_data_loadaddr = LOADADDR(.data);\n')
-	f.write('\t.bss {\n')
+	f.write('\t.bss : {\n')
 	f.write('\t\t*(.bss*)\n')
 	f.write('\t\t*(COMMON)\n')
 	f.write('\t\t. = ALIGN(4);\n')
@@ -90,7 +90,7 @@ def generate(file_name, options):
 		if k in ('RAM', 'ROM'):
 			continue
 		name = k.lower()
-		f.write('\t.%s {\n' % (name))
+		f.write('\t.%s : {\n' % (name))
 		f.write('\t\t*(.%s*)\n' % (name))
 		f.write('\t\t. = ALIGN(4);\n')
 		f.write('\t} >%s\n' % (name))
