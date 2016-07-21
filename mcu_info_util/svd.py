@@ -15,6 +15,7 @@ def load_svd_for_mcu(base_dir, mcu):
 
 class SVD:
 	def __init__(self, file_name):
+		self.file_name = file_name
 		tree = xml.etree.ElementTree.parse(file_name)
 		root = tree.getroot()
 		periphList = root.find('peripherals')
@@ -50,11 +51,19 @@ class SVD:
 		interrupts = {}
 		max_interrupt_index = -1
 		for periph in self.periphList:
+			already_packed = True
+			for reg in periph.regs:
+				if (reg.offset % (reg.size / 8)) != 0:
+					already_packed = False
+					break
 			f.write('/* %s: %s */\n' % (periph.name, periph.desc))
 			f.write('\n')
 			f.write('#ifndef %s_BASE\n' % (periph.name))
 			f.write('\n')
-			f.write('typedef struct PACKED %s_regs_t {\n' % (periph.name))
+			if already_packed:
+				f.write('typedef struct %s_regs_t {\n' % (periph.name))
+			else:
+				f.write('typedef struct PACKED %s_regs_t {\n' % (periph.name))
 			fields = {}
 			max_offset = 0
 			for reg in periph.regs:
@@ -157,6 +166,17 @@ class SVD:
 							f.write('static const uint%s_t %s_%s_%s_MASK = %s;\n' %
 									(reg.size, periph.name, reg.name, field.name, hex(((2 ** field.size) - 1) << field.offset)))
 				f.write('\n')
+			if os.path.basename(self.file_name).upper().startswith('STM32'):
+				if periph.name == 'RCC':
+					f.write('typedef enum STM32RCCPeriph {\n')
+					for reg in periph.regs:
+						if reg.name.endswith('ENR'):
+							for field in reg.fields:
+								if field.name.endswith('EN'):
+									f.write('\tRCC_%s_%s = (%s << 5) | %s,\n' %
+											(reg.name[:-3], field.name[:-2], hex(reg.offset), field.offset))
+					f.write('} STM32RCCPeriph;\n')
+					f.write('\n')
 			f.write('#endif\n')
 			f.write('\n')
 		f.write('#ifdef DEFINE_IRQ_HANDLERS\n')
