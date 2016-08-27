@@ -48,7 +48,20 @@ class DeviceTreeEntry:
 					continue
 				if (not enable_libopencm3) and option.startswith('-lopencm3_'):
 					continue
-				final_options.append(option)
 			else:
-				final_options.append('-D_' + option)
+				option = '-D_' + option
+			if option.startswith('-D'):
+				try:
+					i = option.index('=')
+					if i > 0:
+						defName = option[0:i]
+						defValue = option[(i + 1):]
+						if re.match(r'[0-9]+K', defValue):
+							defValue = int(defValue[:-1]) * 1024
+						elif re.match(r'[0-9]+M', defValue):
+							defValue = int(defValue[:-1]) * 1024 * 1024
+						option = defName + '=' + str(defValue)
+				except:
+					pass
+			final_options.append(option)
 		return final_options
