@@ -1,5 +1,5 @@
 import os
-from mcu_info_util.device_tree import DeviceTree
+from .device_tree import DeviceTree
 
 MCU_TYPES = {
     'stm32': 'arm-none-eabi',

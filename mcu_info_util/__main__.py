@@ -1,9 +1,9 @@
 import argparse
 import os
 
-from mcu_info_util import linker_script
-from mcu_info_util.svd import load_svd_for_mcu
-from mcu_info_util.find_compiler import find_compiler, find_compiler_options
+from . import linker_script
+from .svd import load_svd_for_mcu
+from .find_compiler import find_compiler, find_compiler_options
 
 
 def main():
