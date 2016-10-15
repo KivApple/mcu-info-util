@@ -1,4 +1,10 @@
-import os, re, xml.etree.ElementTree
+import os, re, xml.etree.ElementTree, datetime
+
+
+GENERATED_FILE_HEADER = '''/*
+This file generated at %s by mcu-info-util from SVD description.
+*/
+'''
 
 
 def load_svd_for_mcu(base_dir, mcu):
@@ -27,6 +33,7 @@ class SVD:
 
     def generate_header(self, file_name, use_defines = False):
         f = open(file_name, 'w')
+        f.write(GENERATED_FILE_HEADER % datetime.datetime.now().strftime('%x %X'))
         include_guard = '__%s__' % (os.path.basename(file_name).replace('.', '_').upper())
         f.write('#ifndef %s\n' % (include_guard))
         f.write('#define %s\n' % (include_guard))
