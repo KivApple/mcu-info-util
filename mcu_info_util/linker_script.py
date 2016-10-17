@@ -16,6 +16,11 @@ def generate(file_name, options):
         if name.endswith('_OFF'):
             mem_regions_count += 1
     if mem_regions_count == 0:
+        if file_name == '?':
+            print('no')
+        return
+    if file_name == '?':
+        print('yes')
         return
     f = open(file_name, 'w')
     f.write('EXTERN(vector_table)\n')

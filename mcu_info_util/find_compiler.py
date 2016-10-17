@@ -101,3 +101,10 @@ def find_compiler_options(mcu, metadata_dir, args):
     entry = device_tree.find(mcu)
     compiler_options = entry.get_options(enable_libopencm3=args.enable_libopencm3) if entry else []
     return compiler_options
+
+
+def find_toolchain_prefix(mcu, metadata_dir, args):
+    compiler = find_compiler(mcu, metadata_dir, args)
+    if compiler.endswith('gcc'):
+        return compiler[0:-3]
+    return os.path.dirname(compiler) + '/'

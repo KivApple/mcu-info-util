@@ -25,12 +25,24 @@ MKDIR_P?=mkdir -p
 RM_RFV?=rm -rfv
 Q?=@
 
-MCU_FLAGS:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --print-flags)
+TOOLCHAIN_PREFIX:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --find-prefix)
 COMPILER:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --find-compiler)
 LINKER:=$(COMPILER)
-TOOLCHAIN_DIR:=$(dir $(MCU_COMPILER))
+MCU_FLAGS:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --print-flags)
 
+NEED_LINKER_SCRIPT:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --linker-script ?)
+NEED_HEADER_FILE:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --header ?)
+
+MCU_HEADER_FILE?=$(BUILD_INCLUDE_DIR)/mcudefs.h
+
+CFLAGS+=-I$(BUILD_INCLUDE_DIR)
+
+ifeq ("$(NEED_LINKER_SCRIPT)","yes")
+LINKER_SCRIPT?=$(BUILD_DIR)/script.ld
 LINKER_SCRIPT_COMMAND=$(MCU_INFO_UTIL) --mcu $(MCU) --linker-script "$(LINKER_SCRIPT)"
+LFLAGS+=-T$(LINKER_SCRIPT)
+endif
+
 MCU_HEADER_FILE_COMMAND=$(MCU_INFO_UTIL) --mcu $(MCU) --header "$(MCU_HEADER_FILE)"
 
 C_SOURCES:=$(filter %.c,$(SOURCES))
@@ -45,13 +57,14 @@ OBJECTS:=$(C_OBJECTS) $(CXX_OBJECTS) $(ASM_OBJECTS)
 
 EXECUTABLE_SUFFIX?=.elf
 EXECUTABLE_NAME:=$(BUILD_DIR)/$(PROJECT_NAME)$(EXECUTABLE_SUFFIX)
- 
-LINKER_SCRIPT?=$(BUILD_DIR)/script.ld
-MCU_HEADER_FILE?=$(BUILD_INCLUDE_DIR)/mcudefs.h
+HEX_FILE_NAME:=$(BUILD_DIR)/$(PROJECT_NAME).hex
+BIN_FILE_NAME:=$(BUILD_DIR)/$(PROJECT_NAME).bin
 
 VPATH=$(sort $(SOURCES))
 
-all:: $(BUILD_DIR) $(MCU_HEADER_FILE) $(EXECUTABLE_NAME)
+all:: $(BUILD_DIR) $(MCU_HEADER_FILE) $(EXECUTABLE_NAME)\
+		$(BUILD_DIR)/$(PROJECT_NAME).hex $(BUILD_DIR)/$(PROJECT_NAME).bin
+	$(Q)$(TOOLCHAIN_PREFIX)size $(EXECUTABLE_NAME)
 
 $(BUILD_DIR)::
 	$(Q)$(MKDIR_P) $(BUILD_DIR)
@@ -77,13 +90,23 @@ $(C_OBJECTS): $(BUILD_OBJECTS_DIR)/%.c.o: %.c Makefile
 
 $(CXX_OBJECTS): $(BUILD_OBJECTS_DIR)/%.cpp.o: %.cpp Makefile
 	@echo "COMPILE  $(notdir $<)"
-	$(Q)$(COMPILER) -c -o $@ $(MCU_FLAGS) $(CFLAGS) -MMD -MP -MF $(BUILD_DEPS_DIR)/$(notdir $<).deps $<
+	$(Q)$(COMPILER) -c -o $@ $(MCU_FLAGS) $(CFLAGS) $(CXXFLAGS) -MMD -MP -MF $(BUILD_DEPS_DIR)/$(notdir $<).deps $<
 
 $(ASM_OBJECTS): $(BUILD_OBJECTS_DIR)/%.s.o: %.s Makefile
 	@echo "COMPILE  $(notdir $<)"
 	$(Q)$(COMPILER) -c -o $@ $(MCU_FLAGS) $(CFLAGS) -MMD -MP -MF $(BUILD_DEPS_DIR)/$(notdir $<).deps $<
 
+$(HEX_FILE_NAME): $(EXECUTABLE_NAME)
+	@echo "CONVERT  $(notdir $@)"
+	$(Q)$(TOOLCHAIN_PREFIX)objcopy -Oihex $< $@
+
+$(BIN_FILE_NAME): $(EXECUTABLE_NAME)
+	@echo "CONVERT  $(notdir $@)"
+	$(Q)$(TOOLCHAIN_PREFIX)objcopy -Obinary $< $@
+
 clean::
 	$(Q)$(RM_RFV) $(BUILD_DIR)
+
+.PHONY:: all clean
 
 -include $(BUILD_DEPS_DIR)/*.deps
