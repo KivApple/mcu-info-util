@@ -9,7 +9,8 @@ $(error You should set SOURCES variable to use this makefile)
 endif
 
 ifndef MCU_INFO_UTIL
-MCU_INFO_UTIL:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))../mcu-info-util.py
+MCU_INFO_UTIL:=$(firstword $(wildcard\
+	$(foreach path,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))).. $(subst :, ,$(PATH)),$(path)/mcu-info-util)))
 endif
 ifeq ("$(wildcard $(MCU_INFO_UTIL))","")
 $(error mcu-info-util not found)
