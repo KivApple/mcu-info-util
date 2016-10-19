@@ -9,6 +9,14 @@ MCU_TYPES = {
     'attiny': 'avr'
 }
 
+MCU_TAGS = {
+    'stm32': ('arm', 'stm32'),
+    'atsam': ('arm', 'atmel'),
+    'at91sam': ('arm', 'atmel'),
+    'atmega': ('avr',),
+    'attiny': ('avr',)
+}
+
 
 def get_mcu_type(mcu):
     for prefix in MCU_TYPES:
@@ -16,6 +24,12 @@ def get_mcu_type(mcu):
             return MCU_TYPES[prefix]
     return 'unknown'
 
+
+def get_mcu_tags(mcu):
+    for prefix in MCU_TAGS:
+        if mcu.startswith(prefix):
+            return MCU_TAGS[prefix]
+    return 'unknown',
 
 def find_program(program, paths = None):
     fpath, fname = os.path.split(program)

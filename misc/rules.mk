@@ -10,10 +10,17 @@ endif
 
 ifndef MCU_INFO_UTIL
 MCU_INFO_UTIL:=$(firstword $(wildcard\
-	$(foreach path,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))).. $(subst :, ,$(PATH)),$(path)/mcu-info-util)))
+	$(foreach path,$(subst :, ,$(PATH)) $(dir $(abspath $(lastword $(MAKEFILE_LIST))))..,$(path)/mcu-info-util)))
 endif
 ifeq ("$(wildcard $(MCU_INFO_UTIL))","")
 $(error mcu-info-util not found)
+endif
+
+ifdef ENABLE_LIBOPENCM3
+MCU_INFO_UTIL_FLAGS+=--enable-libopencm3
+endif
+ifdef USE_DEFINES_IN_MCU_HEADER_FILE
+MCU_INFO_UTIL_FLAGS+=--use-defines
 endif
 MCU_INFO_UTIL:=$(MCU_INFO_UTIL) $(MCU_INFO_UTIL_FLAGS)
 
@@ -26,6 +33,7 @@ MKDIR_P?=mkdir -p
 RM_RFV?=rm -rfv
 Q?=@
 
+MCU_TAGS:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --print-tags)
 TOOLCHAIN_PREFIX:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --find-prefix)
 COMPILER:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --find-compiler)
 LINKER:=$(COMPILER)

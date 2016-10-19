@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os
+import os, sys
 from setuptools import setup
 
 
@@ -19,6 +19,7 @@ setup(
     packages=['mcu_info_util'],
     package_dir={'mcu_info_util': 'mcu_info_util'},
     package_data={'mcu_info_util': data_files},
+    data_files=[('share/mcu-info-util', ['misc/rules.mk', 'misc/toolchain.cmake'])],
     entry_points={
         'console_scripts': [
             'mcu-info-util = mcu_info_util.__main__:main'
