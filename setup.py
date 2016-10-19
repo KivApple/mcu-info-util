@@ -12,7 +12,7 @@ data_files = [os.path.relpath(data_file, package_dir) for data_file in data_file
 
 setup(
     name='mcu-info-util',
-    version='0.1',
+    version='0.2',
     author='Ivan Kolesnikov',
     author_email='kiv.apple@gmail.com',
     url='https://github.com/KivApple/mcu-info-util',
