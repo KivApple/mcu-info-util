@@ -1,20 +1,24 @@
 import os
 from .device_tree import DeviceTree
 
+
 MCU_TYPES = {
     'stm32': 'arm-none-eabi',
     'atsam': 'arm-none-eabi',
     'at91sam': 'arm-none-eabi',
     'atmega': 'avr',
-    'attiny': 'avr'
+    'attiny': 'avr',
+    'msp430': 'msp430',
 }
+
 
 MCU_TAGS = {
     'stm32': ('arm', 'stm32'),
     'atsam': ('arm', 'atmel'),
     'at91sam': ('arm', 'atmel'),
     'atmega': ('avr',),
-    'attiny': ('avr',)
+    'attiny': ('avr',),
+    'msp430': ('msp430',),
 }
 
 
@@ -56,6 +60,8 @@ def find_compiler(mcu, metadata_dir, args):
         return find_compiler_arm_none_eabi()
     elif mcu_type == 'avr':
         return find_compiler_avr()
+    elif mcu_type == 'msp430':
+        return find_compiler_msp430()
     return ''
 
 
@@ -106,9 +112,16 @@ def find_compiler_avr():
     return ''
 
 
+def find_compiler_msp430():
+    compiler = find_program('msp430-elf-gcc')
+    if compiler:
+        return compiler
+    return ''
+
+
 def find_compiler_options(mcu, metadata_dir, args):
     mcu_type = get_mcu_type(mcu)
-    if mcu_type == 'avr':
+    if mcu_type in ['avr', 'msp430']:
         return ['-mmcu=' + mcu]
     device_tree = DeviceTree()
     device_tree.load(metadata_dir + '/devices.data')
