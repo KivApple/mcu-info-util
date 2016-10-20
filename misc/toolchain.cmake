@@ -43,6 +43,10 @@ execute_process(COMMAND ${MCU_INFO_UTIL} --mcu ${MCU} --linker-script ?
 file(TO_CMAKE_PATH ${MCU_TOOLCHAIN_PREFIX} MCU_TOOLCHAIN_PREFIX)
 file(TO_CMAKE_PATH ${MCU_COMPILER} MCU_COMPILER)
 
+if("${MCU_COMPILER}" MATCHES "gcc")
+	set(MCU_FLAGS "${MCU_FLAGS} -ffunction-sections -fdata-sections -fno-common -Wl,--gc-sections")
+endif()
+
 set(CMAKE_SYSTEM_NAME Generic)
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)

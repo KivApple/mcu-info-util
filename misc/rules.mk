@@ -52,6 +52,11 @@ LINKER_SCRIPT_COMMAND=$(MCU_INFO_UTIL) --mcu $(MCU) --linker-script "$(LINKER_SC
 LFLAGS+=-T$(LINKER_SCRIPT)
 endif
 
+ifeq ("$(findstring gcc,$(COMPILER))","gcc")
+CFLAGS+=-ffunction-sections -fdata-sections -fno-common
+LFLAGS+=-Wl,--gc-sections
+endif
+
 MCU_HEADER_FILE_COMMAND=$(MCU_INFO_UTIL) --mcu $(MCU) --header "$(MCU_HEADER_FILE)"
 
 C_SOURCES:=$(filter %.c,$(SOURCES))
