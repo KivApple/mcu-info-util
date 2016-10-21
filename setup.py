@@ -5,7 +5,7 @@ from setuptools import setup
 
 package_dir = os.path.join(os.path.dirname(__file__), 'mcu_info_util')
 data_files = []
-for root, dirs, files in os.walk(os.path.join(package_dir, 'metadata')):
+for root, dirs, files in os.walk(os.path.join(package_dir, 'data')):
     data_files += [os.path.join(root, file) for file in files]
 data_files = [os.path.relpath(data_file, package_dir) for data_file in data_files]
 

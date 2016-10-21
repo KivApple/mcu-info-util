@@ -1,7 +1,7 @@
 from six import iteritems
 
 
-def generate(file_name, options):
+def generate(options, filename=None):
     mem_regions_count = 0
     defines = {}
     for option in options:
@@ -16,13 +16,10 @@ def generate(file_name, options):
         if name.endswith('_OFF'):
             mem_regions_count += 1
     if mem_regions_count == 0:
-        if file_name == '?':
-            print('no')
-        return
-    if file_name == '?':
-        print('yes')
-        return
-    f = open(file_name, 'w')
+        return False
+    if filename is None:
+        return True
+    f = open(filename, 'w')
     f.write('EXTERN(vector_table)\n')
     f.write('ENTRY(reset_handler)\n')
     f.write('\n')
@@ -112,3 +109,4 @@ def generate(file_name, options):
     f.write('\n')
     f.write('PROVIDE(_stack = ORIGIN(ram) + LENGTH(ram));\n')
     f.close()
+    return True
