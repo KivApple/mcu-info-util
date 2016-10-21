@@ -1,8 +1,7 @@
 import argparse, os, sys
-
-from . import linker_script
-from .svd import load_svd_for_mcu
 from .find_compiler import find_toolchain_prefix, find_compiler, find_compiler_options, get_mcu_tags
+from . import linker_script
+from mcu_info_util.svd_utils import generate_header
 
 
 def main():
@@ -55,12 +54,10 @@ def main():
         if args.linker_script:
             linker_script.generate(args.linker_script, compiler_options)
         if args.header:
-            svd = load_svd_for_mcu(metadata_dir + '/SVD', mcu)
-            if args.header != '?':
-                if svd:
-                    svd.generate_header(args.header, use_defines=args.use_defines)
+            if args.header == "?":
+                print("yes" if generate_header(args.mcu) else "no")
             else:
-                print("yes" if svd else "no")
+                generate_header(args.mcu, args.header)
     else:
         parser.print_help()
 

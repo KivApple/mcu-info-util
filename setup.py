@@ -26,6 +26,7 @@ setup(
         ]
     },
     install_requires=[
-        'six'
+        'six',
+        'cmsis-svd'
     ]
 )
