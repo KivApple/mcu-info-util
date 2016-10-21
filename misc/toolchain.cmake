@@ -14,16 +14,6 @@ if (NOT MCU_INFO_UTIL)
 endif()
 message(STATUS "mcu-info-util found at path ${MCU_INFO_UTIL}")
 
-if(DEFINED ENABLE_LIBOPENCM3)
-	list(APPEND MCU_INFO_UTIL_FLAGS --enable-libopencm3)
-endif()
-if(DEFINED USE_DEFINES_IN_MCU_HEADER_FILE)
-	list(APPEND MCU_INFO_UTIL_FLAGS --use-defines)
-endif()
-
-execute_process(COMMAND ${MCU_INFO_UTIL} --mcu ${MCU} --print-tags
-	OUTPUT_VARIABLE MCU_TAGS
-	OUTPUT_STRIP_TRAILING_WHITESPACE)
 execute_process(COMMAND ${MCU_INFO_UTIL} --mcu ${MCU} --find-prefix
 	OUTPUT_VARIABLE MCU_TOOLCHAIN_PREFIX
 	OUTPUT_STRIP_TRAILING_WHITESPACE)

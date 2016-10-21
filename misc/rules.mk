@@ -16,12 +16,6 @@ ifeq ("$(wildcard $(MCU_INFO_UTIL))","")
 $(error mcu-info-util not found)
 endif
 
-ifdef ENABLE_LIBOPENCM3
-MCU_INFO_UTIL_FLAGS+=--enable-libopencm3
-endif
-ifdef USE_DEFINES_IN_MCU_HEADER_FILE
-MCU_INFO_UTIL_FLAGS+=--use-defines
-endif
 MCU_INFO_UTIL:=$(MCU_INFO_UTIL) $(MCU_INFO_UTIL_FLAGS)
 
 BUILD_DIR?=build
@@ -33,7 +27,6 @@ MKDIR_P?=mkdir -p
 RM_RFV?=rm -rfv
 Q?=@
 
-MCU_TAGS:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --print-tags)
 TOOLCHAIN_PREFIX:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --find-prefix)
 COMPILER:=$(shell $(MCU_INFO_UTIL) --mcu $(MCU) --find-compiler)
 LINKER:=$(COMPILER)
