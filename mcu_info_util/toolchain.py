@@ -16,7 +16,7 @@ class Toolchain:
         for prefix in cls.MCU_TYPES:
             if mcu.startswith(prefix):
                 return cls.MCU_TYPES[prefix]
-        return 'unknown'
+        return "unknown"
 
     @classmethod
     def find_toolchain(cls, mcu):
