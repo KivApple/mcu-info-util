@@ -29,10 +29,14 @@ def find_for_mcu(mcu):
 
 
 def load_svd_for_mcu(mcu):
-    vendor, filename = find_for_mcu(mcu)
-    if (vendor is None) or (filename is None):
+    #vendor, filename = find_for_mcu(mcu)
+    #if (vendor is None) or (filename is None):
+    #    return None
+    #return SVDParser.for_packaged_svd(vendor, filename).get_device()
+    parser = SVDParser.for_mcu(mcu)
+    if parser is None:
         return None
-    return SVDParser.for_packaged_svd(vendor, filename).get_device()
+    return parser.get_device()
 
 
 GENERATED_FILE_HEADER = """/* This file generated at %s by mcu-info-util from SVD description. */
