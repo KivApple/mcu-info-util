@@ -1,5 +1,7 @@
 # mcu-info-util
 
+[![Build Status](https://travis-ci.org/KivApple/mcu-info-util.svg?branch=master)](https://travis-ci.org/KivApple/mcu-info-util)
+
 This is small utility written in Python what allows you to generate
 linker script and header files (with MMIO registers and IRQ definions)
 for specified MCU.
