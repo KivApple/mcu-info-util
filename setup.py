@@ -16,6 +16,7 @@ setup(
     author='Ivan Kolesnikov',
     author_email='kiv.apple@gmail.com',
     url='https://github.com/KivApple/mcu-info-util',
+    download_url='https://github.com/KivApple/mcu-info-util/archive/v0.2.tar.gz',
     packages=['mcu_info_util'],
     package_dir={'mcu_info_util': 'mcu_info_util'},
     package_data={'mcu_info_util': data_files},
@@ -28,5 +29,6 @@ setup(
     install_requires=[
         'six',
         'cmsis-svd'
-    ]
+    ],
+    description='Small utility that allows you to find embedded toolchain for specified MCU, compiler flags and generate linker script and header files (for ARM MCUs)'
 )
