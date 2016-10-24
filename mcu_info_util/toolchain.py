@@ -39,6 +39,8 @@ class Toolchain:
         compiler = self.find_compiler()
         if compiler.endswith("gcc"):
             return compiler[0:-3]
+        elif compiler.endswith("gcc.exe"):
+            return compiler[0:-7]
         return os.path.dirname(compiler) + os.sep
 
     def get_flags(self, mcu):
