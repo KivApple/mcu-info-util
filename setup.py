@@ -3,7 +3,8 @@ import os, sys
 from setuptools import setup
 
 
-package_dir = os.path.join(os.path.dirname(__file__), 'mcu_info_util')
+base_dir = os.path.dirname(__file__)
+package_dir = os.path.join(base_dir, 'mcu_info_util')
 data_files = []
 for root, dirs, files in os.walk(os.path.join(package_dir, 'data')):
     data_files += [os.path.join(root, file) for file in files]
@@ -20,7 +21,10 @@ setup(
     packages=['mcu_info_util'],
     package_dir={'mcu_info_util': 'mcu_info_util'},
     package_data={'mcu_info_util': data_files},
-    data_files=[('share/mcu-info-util', ['misc/rules.mk', 'misc/toolchain.cmake'])],
+    data_files=[('share/mcu-info-util', [
+        os.path.join(base_dir, 'misc', 'rules.mk'),
+        os.path.join(base_dir, 'misc', 'toolchain.cmake')
+    ])],
     entry_points={
         'console_scripts': [
             'mcu-info-util = mcu_info_util.__main__:main'
