@@ -16,7 +16,8 @@ Run mcu-info-util -h after installation for information about usage.
 ## Requirements
 
 mcu-info-util requires Python 2.7 or higher.
-Also, the package relies on [cmsis-svd](https://github.com/posborne/cmsis-svd) package.
+
+Also, this package relies on [cmsis-svd](https://github.com/posborne/cmsis-svd) package.
 
 ## Stand-alone usage
 
@@ -25,16 +26,11 @@ All others arguments are optional.
 
 Examples:
 
-`mcu-info-util --mcu atmega328p --find-prefix`
-
-`mcu-info-util --mcu atmega328p --find-compiler`
-
-`mcu-info-util --mcu atmega328p --print-flags`
-
-`mcu-info-util --mcu stm32f103c8t6 --linker-script script.ld`
-
-`mcu-info-util --mcu stm32f103c8t6 --header mcudefs.h`
-
+    mcu-info-util --mcu atmega328p --find-prefix
+    mcu-info-util --mcu atmega328p --find-compiler
+    mcu-info-util --mcu atmega328p --print-flags
+    mcu-info-util --mcu stm32f103c8t6 --linker-script script.ld
+    mcu-info-util --mcu stm32f103c8t6 --header mcudefs.h
 
 If mcu-info-util failed to find needed toolchain (e. g. toolchain is not installed) it prints empty line.
 
@@ -44,9 +40,8 @@ Also you can check is linker script and header file needed for specifiend MCU by
 
 Examples:
 
-`mcu-info-util --mcu atmega328p --linker-script ?`
-
-`mcu-info-util --mcu stm32f103c8t6 --header ?`
+    mcu-info-util --mcu atmega328p --linker-script ?
+    mcu-info-util --mcu stm32f103c8t6 --header ?
 
 Also you can find something examples of mcu-info-util usage in misc directory in this repository.
 
