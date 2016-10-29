@@ -15,6 +15,8 @@ mcu-info-util requires Python 2.7 or higher.
 
 Also, this package relies on [cmsis-svd](https://github.com/posborne/cmsis-svd) package.
 
+Program tested on Arch Linux and Windows XP.
+
 ## Installation
 
 You can simple install this package via PyPI:
