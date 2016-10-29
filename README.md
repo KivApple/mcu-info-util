@@ -9,10 +9,6 @@ installed on your system.
 
 Currently supported AVR, MSP430 and some ARM MCUs.
 
-Run python setup.py install to install application to your system.
-
-Run mcu-info-util -h after installation for information about usage.
-
 ## Requirements
 
 mcu-info-util requires Python 2.7 or higher.
@@ -54,6 +50,10 @@ Examples:
     mcu-info-util --mcu stm32f103c8t6 --header ?
 
 Also you can find some examples of mcu-info-util usage in misc directory in this repository.
+
+For more information about command-line options you can run command:
+
+    mcu-info-util -h
 
 ## Library usage
 
