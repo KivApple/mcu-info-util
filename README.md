@@ -36,14 +36,36 @@ If mcu-info-util failed to find needed toolchain (e. g. toolchain is not install
 
 If mcu-info-util failed to find specified MCU in database it prints error message.
 
-Also you can check is linker script and header file needed for specifiend MCU by pass "?" instead of file name as argument of --linker-script and --header parameters. Program will print "yes" or "no". 
+Also you can check is linker script and header file needed for specified MCU by pass "?" instead of file name as argument of --linker-script and --header parameters. Program will print "yes" or "no". 
 
 Examples:
 
     mcu-info-util --mcu atmega328p --linker-script ?
     mcu-info-util --mcu stm32f103c8t6 --header ?
 
-Also you can find something examples of mcu-info-util usage in misc directory in this repository.
+Also you can find some examples of mcu-info-util usage in misc directory in this repository.
+
+## Library usage
+
+You can also use mcu-info-util as library in your own Python code. To do this you need to import
+mcu_info_util package into your program.
+
+Example:
+
+```python
+from mcu_info_util import Toolchain
+mcu = "stm32f103c8t6"
+toolchain = Toolchain.find_toolchain(mcu)
+print(toolchain.find_prefix())
+print(toolchain.find_compiler())
+print(" ".join(toolchain.get_flags(mcu)))
+if toolchain.generate_linker_script(mcu, "script.ld"):
+    print("Linker script generated")
+if toolchain.generate_header(mcu, "mcudefs.h"):
+    print("Header file generated")
+# You can run generate_header and generate_linker_script
+# without second argument just to know is those files needed
+```
 
 ## License
 
